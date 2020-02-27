@@ -1,7 +1,12 @@
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const path = require("path");
 
 module.exports = {
-  entry: "./client/index.js",
+  entry: ["./client/index.js"],
+  output: {
+    path: path.resolve(__dirname, "dist"),
+    filename: "main.js"
+  },
   module: {
     rules: [
       {
@@ -18,6 +23,10 @@ module.exports = {
             loader: "html-loader"
           }
         ]
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"]
       }
     ]
   },
@@ -26,5 +35,11 @@ module.exports = {
       template: "./client/index.html",
       filename: "./index.html"
     })
-  ]
+  ],
+  devServer: {
+    // publicPath: "/dist/",
+    proxy: {
+      "/": "http://localhost:3000"
+    }
+  }
 };
